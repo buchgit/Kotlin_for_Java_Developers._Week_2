@@ -1,5 +1,9 @@
 package mastermind
 
+/*
+Задание по программированию: Mastermind game
+ */
+
 data class Evaluation(val rightPosition: Int, val wrongPosition: Int)
 
 const val r: Char = 'r'
