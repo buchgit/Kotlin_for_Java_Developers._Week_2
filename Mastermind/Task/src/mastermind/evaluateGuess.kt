@@ -2,38 +2,57 @@ package mastermind
 
 data class Evaluation(val rightPosition: Int, val wrongPosition: Int)
 
+const val r: Char = 'r'
+const val w: Char = 'w'
+
 fun evaluateGuess(secret: String, guess: String): Evaluation {
 
     if (secret.isEmpty() or guess.isEmpty() or secret.isBlank() or guess.isBlank()) {
-        Evaluation(0,0)
+        Evaluation(0, 0)
     }
 
-    val rightPositions:Int = getRightPositions(secret,guess)
-    val wrongPosition:Int = getWrongPositions(secret,guess)
+    return getCountOfPositions(secret, guess)
 
-    return Evaluation(rightPositions,wrongPosition)
 }
 
-fun getWrongPositions(secret: String, guess: String): Int {
-    var wrongPosition = 0
+fun getCountOfPositions(secret: String, guess: String): Evaluation {
 
-    for (ch:Char in guess){
-        if(secret.contains(ch,true)){
+    var wrongPosition = 0
+    var rightPosition = 0
+
+    val map: MutableMap<Int, Char> = mutableMapOf()
+    for (index in secret.indices) {
+        map[index] = secret[index]
+    }
+
+    for (index in guess.indices) {
+        if (guess[index] == secret[index]) {
+            var previousPosition = map[index]
+            map[index] = r
+            if (previousPosition == w) {
+                findWrongPosition(map, guess[index])
+            }
+            continue
+        }
+        findWrongPosition(map, guess[index])
+    }
+
+    for ((key, value) in map) {
+        if (value == r) {
+            rightPosition++
+        } else if (value == w) {
             wrongPosition++
         }
     }
 
-    return wrongPosition
+    return Evaluation(rightPosition, wrongPosition)
 }
 
-fun getRightPositions(secret: String,guess: String):Int{
-    var rightPosition = 0
-
-    for (index in guess.indices){
-        if(secret[index]==guess[index]){
-            rightPosition++
+fun findWrongPosition(map: MutableMap<Int, Char>, char: Char) {
+    for ((key, value) in map) {
+        if (value == char) {
+            map[key] = w
+            break
         }
     }
-
-    return rightPosition
 }
