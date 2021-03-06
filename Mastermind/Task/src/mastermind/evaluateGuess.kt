@@ -27,7 +27,7 @@ fun getCountOfPositions(secret: String, guess: String): Evaluation {
 
     for (index in guess.indices) {
         if (guess[index] == secret[index]) {
-            var previousPosition = map[index]
+            val previousPosition = map[index]
             map[index] = r
             if (previousPosition == w) {
                 findWrongPosition(map, guess[index])
@@ -37,7 +37,7 @@ fun getCountOfPositions(secret: String, guess: String): Evaluation {
         findWrongPosition(map, guess[index])
     }
 
-    for ((key, value) in map) {
+    for (value in map.values) {
         if (value == r) {
             rightPosition++
         } else if (value == w) {
